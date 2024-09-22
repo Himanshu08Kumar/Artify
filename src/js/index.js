@@ -8,24 +8,29 @@ const sculptures = document.querySelector("#sculptures");
 const contemporary = document.querySelector("#contemporary");
 
 const unsplash = createApi({
-  accessKey:
-    import.meta.env.ACCESS_KEY || "Z9vfZEfgbG9pFwF7U7G_YT1kw2a9t-mz5IoGz3Y3_dM",
+  accessKey: import.meta.env.ACCESS_KEY || "Z9vfZEfgbG9pFwF7U7G_YT1kw2a9t-mz5IoGz3Y3_dM",
 });
+
+
 
 // Function to render photos on the page
 function renderPhotos(photos, container) {
+  const favorites = getFavoritesFromLocalStorage(); // Get favorites from localStorage
   const getUrls = photos
     .map((photo) => {
-      return `<img src="${photo.urls.small}" id="fetch-image" alt="${photo.alt_description}" data-id="${photo.id}" class="photo"/>`;
+      const isFavorite = favorites.some((fav) => fav.id === photo.id); // Check if the photo is already in favorites
+      return `
+        <div class="photo-container">
+          <img src="${photo.urls.small}" id="fetch-image" alt="${photo.alt_description}" data-id="${photo.id}" class="photo"/>
+          <span class="heart-icon" data-id="${photo.id}" style="color: ${isFavorite ? 'red' : 'grey'};cursor:pointer">&#10084;</span>
+        </div>
+      `;
     })
     .join("");
   container.innerHTML = getUrls;
-
-  // Add event listener to each image for showing detailed view on click
   container.querySelectorAll(".photo").forEach((image) => {
     image.addEventListener("click", () => showImageDetails(image.dataset.id));
   });
-}
 
 // Function to show image details in a new tab
 function showImageDetails(photoId) {
@@ -76,13 +81,14 @@ function showImageDetails(photoId) {
           <body>
             <div class="image-container">
             <a href ="/index.html" style="background-color:none, background: none"><img src="./assets/back.png" alt="back" width="50" class="backHome"></a>
-              <img src="${photo.urls.regular}" alt="${photo.alt_description}" 
+              <img src="${photo.urls.regular}" 
+              alt="${photo.alt_description}" 
               style="max-width: 100%;
                 height: 80%;
                 border-radius: 12px;
                 margin: 20px 0;"/>
-              <h3>${photo.alt_description.toUpperCase() || "No description available"}</h3>
-              <p><strong>By - </strong> ${photo.user.name}</p>
+                <h3>${photo.alt_description.toUpperCase() || "No description available"}</h3>
+              <p><strong>Photographer:</strong> ${photo.user.name}</p>
               <p><strong>Likes:</strong> ${photo.likes}</p>
             </div>
           </body>
@@ -93,33 +99,59 @@ function showImageDetails(photoId) {
   });
 }
 
+  // Add event listener to each heart icon
+  container.querySelectorAll(".heart-icon").forEach((icon) => {
+    icon.addEventListener("click", (event) => toggleFavorite(event.target));
+  });
+}
+
+// Toggle favorite status and redirect to favorite page if heart icon is clicked
+function toggleFavorite(icon) {
+  const photoId = icon.dataset.id;
+  const favorites = getFavoritesFromLocalStorage();
+  const photoIndex = favorites.findIndex((fav) => fav.id === photoId);
+
+  if (photoIndex !== -1) {
+    // If the photo is already in favorites, remove it
+    favorites.splice(photoIndex, 1);
+    icon.style.color = "grey"; // Change the heart icon color to grey
+  } else {
+    // If not, add it to favorites
+    const photoElement = document.querySelector(`[data-id="${photoId}"]`);
+    const photoUrl = photoElement.src;
+    const altDescription = photoElement.alt;
+    favorites.push({ id: photoId, url: photoUrl, description: altDescription });
+    icon.style.color = "red"; // Change the heart icon color to red
+  }
+
+  localStorage.setItem("favorites", JSON.stringify(favorites));
+
+}
+
+// Get favorites from localStorage
+function getFavoritesFromLocalStorage() {
+  return JSON.parse(localStorage.getItem("favorites")) || [];
+}
+
 // Function to fetch photos based on category or query
-function fetchPhotos(category) {
-  return unsplash.search
+async function fetchPhotos(category) {
+  const result = await unsplash.search
     .getPhotos({
       query: category,
       page: 1,
       perPage: 30,
       orientation: "portrait",
-    })
-    .then((result) => {
-      if (result.type === "success") {
-        const photos = result.response.results;
-        console.log(photos)
-        return photos;
-        
-      }
-      return [];
     });
+  if (result.type === "success") {
+    const photos = result.response.results;
+    return photos;
+  }
+  return [];
 }
 
 // Combine and render images for multiple categories
 function renderImage() {
-  Promise.all([
-    fetchPhotos("winter"),
-    fetchPhotos("summer"),
-    fetchPhotos("nature"),
-  ])
+  Promise.all([fetchPhotos("winter"), fetchPhotos("summer"), fetchPhotos("nature")])
     .then((results) => {
       const allPhotos = [...results[0], ...results[1], ...results[2]];
       renderPhotos(allPhotos, main);

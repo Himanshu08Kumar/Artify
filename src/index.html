@@ -22,35 +22,35 @@
     <div>
       <nav class="nav">
         <div>
-          <a href="/index.html"
-            ><img src="./assets/Logo.png" alt="" width="250" height="200"
-          /></a>
+          <a href="/index.html">
+            <img src="./assets/Logo.png" alt="" width="250" height="200" />
+          </a>
         </div>
-
-        <div>
-          <ul class="nav-list">
-            <a href="#abstract-art"><li id="abstract">Abstract Art</li></a>
-            <a href="#modern-art"><li id="classic">Modern Art</li></a>
-            <a href="#sculpture-art"><li id="sculptures">Sculptures</li></a>
-            <a href="#contemporary-art"
-              ><li id="contemporary">Contemporary Art</li></a
-            >
-          </ul>
+        <span class="menu-toggle" onclick="toggleMenu()">☰</span>
+        <div class="nav-list">
+          <a href="#abstract-art"><li id="abstract">Abstract Art</li></a>
+          <a href="#modern-art"><li id="classic">Modern Art</li></a>
+          <a href="#sculpture-art"><li id="sculptures">Sculptures</li></a>
+          <a href="#contemporary-art"><li id="contemporary">Contemporary Art</li></a>
         </div>
+        <a href="favorite.html" id="favorite-link" class="favorites-btn">
+          <i class="bi bi-heart-fill"></i> Your Favorites
+        </a>
       </nav>
 
       <div id="searchBar">
-        <input type="text" name="" id="search-input" placeholder="Search..." />
+        <input type="text" id="search-input" placeholder="Search..." />
       </div>
       <div id="mainContent">
         <h2 class="sub-heading">Images</h2>
         <div id="main" class="image-render"></div>
       </div>
-      <div id="favorites">
-        <h2>Your Favorites</h2>
-      </div>
-      
     </div>
     <script type="module" src="js/index.js"></script>
+    <script>
+      function toggleMenu() {
+        document.querySelector('.nav').classList.toggle('active');
+      }
+    </script>
   </body>
 </html>

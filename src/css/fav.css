@@ -1,0 +1,105 @@
+#favorites-section {
+    padding: 20px;
+    text-align: center;
+  }
+  
+  #favorite-images {
+    display: grid;
+    grid-gap: 3rem;
+    padding: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+  
+  .photo-container {
+    position: relative;
+    /* display:; */
+  }
+  
+  #fetch-Fav-Image {
+    max-width: 100%;
+    width: 300px;
+    max-height: 450px; /* Defined height remains */
+    height: 450px;
+    border-radius: 2rem;
+    object-fit: cover;
+    transition: transform 0.3s, opacity 0.3s;
+    opacity: 0.9;
+  }
+  
+  #fetch-Fav-Image:hover {
+    transform: scale(1.01);
+    opacity: 1;
+  }
+  
+  .photo-container .heart-icon {
+    position: absolute;
+    bottom: -10%;
+    right: 50%;
+    cursor: pointer;
+    font-size: 24px;
+    color: red;
+  }
+  
+  @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&display=swap');
+  
+  * {
+    font-family: 'Open Sans', sans-serif;
+    box-sizing: border-box;
+  }
+  
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: rgb(47,46,46);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: aliceblue;
+  }
+  
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 5%;
+    background: linear-gradient(40deg, rgb(223, 223, 223) 0%, rgba(47,46,46,1) 100%);
+  }
+  
+  .nav img {
+    width: 150px;
+    height: auto;
+  }
+  
+  .sub-heading {
+    text-align: center;
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-top: 1.5rem;
+    color: aliceblue;
+    border-top: 1px solid #fefae0;
+    border-bottom: 1px solid #fefae0;
+    padding: 0.5rem 0;
+    width: 80%;
+    margin: 0 auto;
+  }
+  
+  @media screen and (max-width: 768px) {
+    .nav img {
+      width: 120px;
+    }
+    
+    .nav {
+      flex-direction: column;
+      padding: 1rem;
+    }
+  
+    .sub-heading {
+      font-size: 1.8rem;
+    }
+  
+    #fetch-Fav-Image {
+      max-height: 300px;
+      height: auto;
+    }
+  }
+  
