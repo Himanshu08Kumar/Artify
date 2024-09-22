@@ -76,13 +76,13 @@ function showImageDetails(photoId) {
           <body>
             <div class="image-container">
             <a href ="/index.html" style="background-color:none, background: none"><img src="./assets/back.png" alt="back" width="50" class="backHome"></a>
-              <h3>${photo.alt_description || "No description available"}</h3>
               <img src="${photo.urls.regular}" alt="${photo.alt_description}" 
               style="max-width: 100%;
                 height: 80%;
                 border-radius: 12px;
                 margin: 20px 0;"/>
-              <p><strong>Photographer:</strong> ${photo.user.name}</p>
+              <h3>${photo.alt_description.toUpperCase() || "No description available"}</h3>
+              <p><strong>By - </strong> ${photo.user.name}</p>
               <p><strong>Likes:</strong> ${photo.likes}</p>
             </div>
           </body>
@@ -105,7 +105,9 @@ function fetchPhotos(category) {
     .then((result) => {
       if (result.type === "success") {
         const photos = result.response.results;
+        console.log(photos)
         return photos;
+        
       }
       return [];
     });
