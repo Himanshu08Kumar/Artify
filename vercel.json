@@ -1,6 +1,5 @@
 {
-    "routes": [
-      { "src": "/favorite", "dest": "/favorite.html" }
+    "rewrites":[
+        {"source":"/(.*)", "destination":"/favorite.html"}
     ]
-  }
-  
+}
