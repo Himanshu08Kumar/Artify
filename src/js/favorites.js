@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
     // Get favorites from localStorage
     const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+    console.log(favorites);
   
     // Render the favorite items
     function renderFavorites() {
